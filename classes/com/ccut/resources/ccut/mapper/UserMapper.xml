@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ccut.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="User">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+            <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
+            <result property="avatar" column="AVATAR" jdbcType="VARCHAR"/>
+            <result property="sex" column="SEX" jdbcType="CHAR"/>
+            <result property="phoneNumber" column="PHONE_NUMBER" jdbcType="VARCHAR"/>
+            <result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP"/>
+            <result property="updateDate" column="UPDATE_DATE" jdbcType="TIMESTAMP"/>
+
+    </resultMap>
+
+
+
+    <sql id="Base_Column_List">
+        ID,USERNAME,PASSWORD,
+        AVATAR,SEX,PHONE_NUMBER,
+        CREATE_DATE,UPDATE_DATE
+    </sql>
+    <update id="updateAvatarByInt" >
+        update music.user set AVATAR=#{newAvatar}  WHERE id=#{id}
+    </update>
+    <update id="updateUsernameById">
+        update music.user set USERNAME=#{username} WHERE id=#{id}
+    </update>
+    <update id="updatePasswordById">
+        update music.user set music.user.PASSWORD=#{newPassword} where id=#{id}
+    </update>
+    <update id="updatePasswordByPhone">
+        update music.user set PASSWORD=#{newPassword} where  PHONE_NUMBER=#{phone}
+    </update>
+    <select id="userIsExist" resultType="User">
+        select ID, USERNAME,AVATAR from music.user  where  username=#{username} and password=#{password}
+    </select>
+    <select id="selectByPhone" resultType="User">
+        SELECT  * FROM music.user WHERE PHONE_NUMBER=#{phone}
+    </select>
+</mapper>

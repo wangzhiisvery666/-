@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ccut.mapper.StoreAuditMapper">
+
+    <resultMap id="BaseResultMap" type="StoreAudit">
+            <id property="auditId" column="audit_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="auditName" column="audit_name" jdbcType="VARCHAR"/>
+            <result property="creditCode" column="credit_code" jdbcType="VARCHAR"/>
+            <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
+            <result property="contactPhone" column="contact_phone" jdbcType="VARCHAR"/>
+            <result property="companyAddress" column="company_address" jdbcType="VARCHAR"/>
+<!--            <result property="companyArea" column="company_area" jdbcType="VARCHAR"/>-->
+            <result property="businessLicense" column="business_license" jdbcType="VARCHAR"/>
+<!--            <result property="storeExterior" column="store_exterior" jdbcType="VARCHAR"/>-->
+<!--            <result property="storePhotos" column="store_photos" jdbcType="VARCHAR"/>-->
+            <result property="storeDescription" column="store_description" jdbcType="VARCHAR"/>
+            <result property="approvalStatus" column="approval_status" jdbcType="TINYINT"/>
+            <result property="auditResults" column="audit_results" jdbcType="VARCHAR"/>
+            <result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP"/>
+            <result property="updateDate" column="UPDATE_DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        audit_id,user_id,store_name,
+        credit_code,contact_name,contact_phone,
+        company_address,business_license,store_description,
+        approval_status,audit_results,CREATE_DATE,
+        UPDATE_DATE
+    </sql>
+    <update id="updateApproval">
+        UPDATE  store_audit SET audit_results=#{aResults},approval_status=#{app} where audit_id=#{id}
+    </update>
+    <update id="updatePictrueByDate">
+        update store_audit as A , ((select audit_id from store_audit order by CREATE_DATE DESC LIMIT 1 ) ) AS B
+        set
+            business_license=#{pic}
+        where
+            user_id=#{uid}
+          and  A.audit_id =B.audit_id;
+    </update>
+    <delete id="exceptionDeleteApp">
+        delete from store_audit  where   user_id=#{uid} and   create_date =  (select MAX(CREATE_DATE) from store_audit  WHERE  user_id=#{uid})
+    </delete>
+    <select id="getAllOrder" resultType="StoreAudit">
+        select audit_id,audit_name,credit_code,contact_name,contact_phone,
+               company_address,business_license,store_description,approval_status,CREATE_DATE from store_audit order by CREATE_DATE DESC ;
+    </select>
+    <select id="storeName" resultType="java.lang.Integer">
+        select count(audit_id) from store_audit where audit_name=#{auditName}
+    </select>
+    <select id="getStatus" resultType="java.lang.Integer">
+        select approval_status from  store_audit WHERE  user_id=#{uid} order by CREATE_DATE DESC limit 1;
+    </select>
+    <select id="getApplication" resultType="StoreAudit">
+        select user_id,audit_id,audit_name,credit_code,contact_name,contact_phone
+             ,company_address,business_license,store_description, CREATE_DATE
+        from  store_audit WHERE  user_id=#{uid} order by CREATE_DATE DESC limit 1;
+    </select>
+
+</mapper>

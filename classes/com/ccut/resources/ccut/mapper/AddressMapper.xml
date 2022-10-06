@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ccut.mapper.AddressMapper">
+
+    <resultMap id="BaseResultMap" type="Address">
+            <id property="id" column="ID" jdbcType="BIGINT"/>
+            <result property="location" column="Location" jdbcType="VARCHAR"/>
+            <result property="permission" column="permission" jdbcType="CHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="contactname" column="ContactName" jdbcType="VARCHAR"/>
+            <result property="province" column="Province" jdbcType="VARCHAR"/>
+            <result property="city" column="City" jdbcType="VARCHAR"/>
+            <result property="area" column="Area" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,Location,permission,
+        user_id,phone,ContactName,
+        Province,City,Area
+    </sql>
+    <update id="updatePermissionByUserId">
+        update  music.address  set  permission='0' where permission='1' and music.address.user_id=#{uid}
+    </update>
+</mapper>
